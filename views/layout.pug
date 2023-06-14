@@ -10,13 +10,16 @@ html(lang="en-US")
     link(rel="stylesheet" href="/stylesheets/application.css")
 
   body
-  header
-    h1 Todo Tracker
-    block headerLinks
+     header
+       h1 Todo Tracker
+       block headerLinks
 
-  main
-    if errorMessage
-      .flash.error
-        p= errorMessage
+     main
+       - let kinds = Object.keys(flash || {});
+       if kinds.length > 0
+         ul
+           each kind in kinds
+             each message in flash[kind]
+               li.flash(class=kind)= message
 
-    block main
+       block main
