@@ -10,9 +10,13 @@ html(lang="en-US")
     link(rel="stylesheet" href="/stylesheets/application.css")
 
   body
-    header
-      h1 Todo Tracker
-      block headerLinks
+  header
+    h1 Todo Tracker
+    block headerLinks
 
-    main
-      block main
+  main
+    if errorMessage
+      .flash.error
+        p= errorMessage
+
+    block main
