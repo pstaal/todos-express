@@ -42,6 +42,16 @@ const loadTodoList = todoListId => {
   return todoLists.find(todoList => todoList.id === todoListId);
 };
 
+// Find a todo with the indicated ID in the indicated todo list. Returns
+// `undefined` if not found. Note that both `todoListId` and `todoId` must be
+// numeric.
+const loadTodo = (todoListId, todoId) => {
+  let todoList = loadTodoList(todoListId);
+  if (!todoList) return undefined;
+
+  return todoList.todos.find(todo => todo.id === todoId);
+};
+
 // Render the list of todo lists
 app.get("/lists", (req, res) => {
     res.render("lists", {
@@ -101,6 +111,58 @@ app.get("/lists/:todoListId", (req, res, next) => {
       todoList: todoList,
       todos: sortTodos(todoList),
     });
+  }
+});
+
+// Toggle completion status of a todo
+app.post("/lists/:todoListId/todos/:todoId/toggle", (req, res, next) => {
+  let { todoListId, todoId } = { ...req.params };
+  let todo = loadTodo(+todoListId, +todoId);
+  if (!todo) {
+    next(new Error("Not found."));
+  } else {
+    let title = todo.title;
+    if (todo.isDone()) {
+      todo.markUndone();
+      req.flash("success", `"${title}" marked as NOT done!`);
+    } else {
+      todo.markDone();
+      req.flash("success", `"${title}" marked done.`);
+    }
+
+    res.redirect(`/lists/${todoListId}`);
+  }
+});
+
+// Delete a todo
+app.post("/lists/:todoListId/todos/:todoId/destroy", (req, res, next) => {
+  let { todoListId, todoId } = { ...req.params };
+
+  let todoList = loadTodoList(+todoListId);
+  if (!todoList) {
+    next(new Error("Not found."));
+  } else {
+    let todo = loadTodo(+todoListId, +todoId);
+    if (!todo) {
+      next(new Error("Not found."));
+    } else {
+      todoList.removeAt(todoList.findIndexOf(todo));
+      req.flash("success", "The todo has been deleted.");
+      res.redirect(`/lists/${todoListId}`);
+    }
+  }
+});
+
+// Mark all todos as done
+app.post("/lists/:todoListId/complete_all", (req, res, next) => {
+  let todoListId = req.params.todoListId;
+  let todoList = loadTodoList(+todoListId);
+  if (!todoList) {
+    next(new Error("Not found."));
+  } else {
+    todoList.markAllDone();
+    req.flash("success", "All todos have been marked as done.");
+    res.redirect(`/lists/${todoListId}`);
   }
 });
 
