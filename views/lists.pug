@@ -7,7 +7,7 @@ block main
     ul#lists
       each todoList in todoLists
         li(class=todoList.isDone() ? "done" : "")
-          a(href=`/lists/${todoList.id}`)
+          a(href=`/lists/${todoList.id}/all`)
             h2= todoList.title
             p #{todoList.allDone().size()} / #{todoList.size()}
 

@@ -109,6 +109,21 @@ form input[type="password"] {
   width: 100%;
 }
 
+form input[type="text"].todoInput {
+  width: 40%;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.subContainer {
+  display: flex;
+  width: 48%;
+  flex-direction: column;
+}
+
 form input[type="submit"],
 form fieldset button {
   -moz-appearance: none;
@@ -267,9 +282,28 @@ form fieldset.actions a:hover {
   opacity: 1;
 }
 
+.todoContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 60px;
+}
+
 #todos > ul li.done h3 {
   color: #bebebe;
   text-decoration: line-through;
+  background-color: #ffffff;
+}
+
+.family {
+  background-color: rgba(192, 133, 38, 0.2)
+}
+
+.work {
+  background-color: rgba(93, 189, 240, 0.2)
+}
+
+.friends {
+  background-color: rgba(146, 191, 91, 0.2)
 }
 
 #todos.done header .check {
@@ -297,6 +331,13 @@ form fieldset.actions a:hover {
   padding: 128px 0 0;
   text-align: center;
 }
+
+#todos > ul li .todoContainer a {
+  text-indent: 0;
+  position: relative;
+}
+
+
 
 #lists li::before {
   background-color: #dd5f4f;
